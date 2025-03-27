@@ -271,10 +271,6 @@ public:
     void insert(int key) {
         int index = hashFunction(key);
         table[index].push_back(key);
-        ///cout << key << " " << index << endl;
-        ///if (find(table[index].begin(), table[index].end(), key) == table[index].end()) {
-        ///    table[index].push_back(key);
-        ///}
     }
 
     void remove(int key) {

@@ -162,18 +162,18 @@ bool iS2(const vector<int>& b, int row, int col) {
 void q(vector<int>& b, int row) {
     if (row == N) {
         solutions++;
-        if (solutions == 1) { 
+        if (solutions == 1) {
             finalBoard = b;
         }
         return;
     }
-    
+
     for (int col = 0; col < N; col++) {
-       if (iS2(b, row, col)) {
-           b[row] = col;
-           q(b, row + 1);
-       }
-   }    
+        if (iS2(b, row, col)) {
+            b[row] = col;
+            q(b, row + 1);
+        }
+    }
 }
 
 void f(vector<int>& b, int row) {
@@ -197,7 +197,7 @@ void printBoard(const vector<int>& b, int ch) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             if (b[i] == j && ch == 1) {
-                cout << "Q "; 
+                cout << "Q ";
             }
             else if (b[i] == j && ch == 2) {
                 cout << "F ";
@@ -220,7 +220,7 @@ void lab3() {
     int ch;
     cout << "~#/: ";
     cin >> ch;
-  
+
 
     if (ch == 1) {
         if (N < 2) {
@@ -241,10 +241,10 @@ void lab3() {
         f(b, 0);
         cout << "Число возможных расстановок " << N << " ладый на доске " << N << " на " << N << ": " << solutions << endl;
 
-         if (solutions > 0) {
+        if (solutions > 0) {
             cout << "\nОдна из возможных расстановок:" << endl;
             printBoard(finalBoard, ch);
-         }
+        }
     }
     else {
         cout << "Неверный выбор!" << endl;
@@ -261,7 +261,7 @@ private:
     vector<list<int>> table;
 
     int hashFunction(int key) {
-        return SIZE%key;
+        return SIZE % key;
 
     }
 
@@ -328,20 +328,24 @@ void lab4() {
             "\n1. Добавить элемент"
             "\n2. Удалить элемент"
             "\n3. Поиск элемента"
-            "\n4. Пропустить" << endl;
+            "\n4. Пропустить"
+            "\n\n~#: ";
 
         cin >> ch2;
 
         switch (ch2) {
         case 1:
+            reg2 = true;
             while (reg2) {
                 cout << "\nВведите число, которое нужно добавить (если выход, то 0): ";
                 cin >> num;
                 if (num == 0) {
                     reg2 = false;
-                } else if (num > 100) {
+                }
+                else if (num > 100) {
                     printf("Число может быть только меньше 101\n");
-                } else {
+                }
+                else {
                     hashTable.insert(num);
                 }
             }
@@ -355,9 +359,11 @@ void lab4() {
                 cin >> num;
                 if (num == 0) {
                     reg2 = false;
-                } else if (num > 100) {
+                }
+                else if (num > 100) {
                     printf("Число может быть только меньше 101\n");
-                } else {
+                }
+                else {
                     hashTable.remove(num);
                 }
             }
@@ -367,11 +373,13 @@ void lab4() {
         case 3:
             cout << "\nВведите число для поиска: ";
             cin >> num;
-            if (hashTable.search(num)) {
-                cout << "Число найдено в хеш-таблице." << endl;
-            } else if (num > 100 || num == 0) {
+            if (num > 100 || num == 0) {
                 printf("Число может быть только меньше 101 и не == 0\n");
-            } else {
+            }
+            else if (hashTable.search(num)) {
+                cout << "Число найдено в хеш-таблице." << endl;
+            }
+            else {
                 cout << "Число отсутствует в хеш-таблице." << endl;
             }
             system("pause");

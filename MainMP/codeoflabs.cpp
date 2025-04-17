@@ -4,6 +4,10 @@
 #include <vector>
 #include <fstream>
 #include <list>
+#include <set>
+#include <queue>
+#include <limits>
+
 using namespace std;
 HANDLE hOUTPUT2 = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -393,4 +397,109 @@ void lab4() {
     }
     hashTable.print(outputFile);
     outputFile.close();
+}
+
+
+
+///Lab5 - Графы
+const int INF = numeric_limits<int>::max();
+
+struct Edge {
+    int to, weight;
+};
+
+void dijkstra(int start, int target, const vector<vector<Edge>>& graph) {
+    int n = graph.size();
+    vector<int> dist(n, INF);
+    vector<int> parent(n, -1);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+    dist[start] = 0;
+    pq.push({ 0, start });
+
+    while (!pq.empty()) {
+        int v = pq.top().second;
+        int d_v = pq.top().first;
+        pq.pop();
+
+        if (d_v != dist[v]) continue;
+
+        for (auto edge : graph[v]) {
+            int to = edge.to;
+            int weight = edge.weight;
+
+            if (dist[v] + weight < dist[to]) {
+                dist[to] = dist[v] + weight;
+                parent[to] = v;
+                pq.push({ dist[to], to });
+            }
+        }
+    }
+
+    if (dist[target] == INF) {
+        cout << "Нет пути от " << start + 1 << " до " << target + 1 << "\n";
+        return;
+    }
+
+    cout << "Кратчайший путь от " << start + 1 << " до " << target + 1 << " равен " << dist[target] << "\n";
+    vector<int> path;
+    for (int v = target; v != -1; v = parent[v])
+        path.push_back(v);
+    reverse(path.begin(), path.end());
+
+    cout << "Путь: ";
+    for (int v : path) cout << v + 1 << " ";
+    cout << "\n";
+}
+
+void lab5() {
+    setlocale(LC_ALL, "");
+    int n = 9;
+    vector<vector<Edge>> graph(n);
+    set<pair<int, int>> added_edges;
+
+    vector<vector<int>> edges = {
+        {1, 2, 10}, {1, 7, 3}, {1, 8, 6}, {1, 9, 12},
+        {2, 3, 18}, {2, 7, 2}, {2, 9, 13},
+        {3, 9, 7}, {3, 6, 20}, {3, 4, 25},
+        {4, 5, 5}, {4, 6, 16}, {4, 7, 4},
+        {5, 6, 10},
+        {6, 7, 1}, {6, 8, 15}, {6, 9, 9},
+        {7, 9, 24},
+        {8, 5, 23}, {8, 6, 15}, {8, 9, 5}
+    };
+
+    for (const auto& edge : edges) {
+        int u = edge[0] - 1;
+        int v = edge[1] - 1;
+        int w = edge[2];
+
+        if (u >= n || v >= n) {
+            cout << "Ошибка: выход за границы массива!" << endl;
+            continue;
+        }
+
+        if (added_edges.find({ u, v }) == added_edges.end() && added_edges.find({ v, u }) == added_edges.end()) {
+            graph[u].push_back({ v, w });
+            graph[v].push_back({ u, w });
+            added_edges.insert({ u, v });
+        }
+    }
+
+    int start;
+    int target;
+
+
+    cout << "Откуда идем: ";
+    cin >> start;
+    cout << "Куда идем: ";
+    cin >> target;
+
+    start = start - 1;
+    target = target - 1;
+
+
+
+
+    dijkstra(start, target, graph);
 }

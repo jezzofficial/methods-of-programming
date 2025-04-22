@@ -53,6 +53,18 @@ void logo(int n) {
 | $$  | $$| $$  | $$|  $$$$$$/| $$  | $$        | $$      |  $$$$$$/| $$ \  $$|  $$$$$$/
 |__/  |__/|__/  |__/ \______/ |__/  |__/        |__/       \______/ |__/  \__/ \______/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 )";
+    } else if (n == 4) {
+        logo = LR"(
+  ______  _______   ______  _______  __    __ 
+ /      \|       \ /      \|       \|  \  |  \
+|  ▓▓▓▓▓▓\ ▓▓▓▓▓▓▓\  ▓▓▓▓▓▓\ ▓▓▓▓▓▓▓\ ▓▓  | ▓▓
+| ▓▓ __\▓▓ ▓▓__| ▓▓ ▓▓__| ▓▓ ▓▓__/ ▓▓ ▓▓__| ▓▓
+| ▓▓|    \ ▓▓    ▓▓ ▓▓    ▓▓ ▓▓    ▓▓ ▓▓    ▓▓
+| ▓▓ \▓▓▓▓ ▓▓▓▓▓▓▓\ ▓▓▓▓▓▓▓▓ ▓▓▓▓▓▓▓| ▓▓▓▓▓▓▓▓
+| ▓▓__| ▓▓ ▓▓  | ▓▓ ▓▓  | ▓▓ ▓▓     | ▓▓  | ▓▓
+ \▓▓    ▓▓ ▓▓  | ▓▓ ▓▓  | ▓▓ ▓▓     | ▓▓  | ▓▓
+  \▓▓▓▓▓▓ \▓▓   \▓▓\▓▓   \▓▓\▓▓      \▓▓   \▓▓                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+)";
     }
     locale::global(locale("en_US.UTF-8"));
     wcout.imbue(locale());
@@ -402,7 +414,7 @@ void lab4() {
 
 
 ///Lab5 - Графы
-const int INF = numeric_limits<int>::max();
+const int INF = 2147483647;
 
 struct Edge {
     int to, weight;
@@ -437,11 +449,11 @@ void dijkstra(int start, int target, const vector<vector<Edge>>& graph) {
     }
 
     if (dist[target] == INF) {
-        cout << "Нет пути от " << start + 1 << " до " << target + 1 << "\n";
+        cout << "\nНет пути от " << start + 1 << " до " << target + 1 << "\n";
         return;
     }
 
-    cout << "Кратчайший путь от " << start + 1 << " до " << target + 1 << " равен " << dist[target] << "\n";
+    cout << "\nКратчайший путь от " << start + 1 << " до " << target + 1 << " равен " << dist[target] << "\n";
     vector<int> path;
     for (int v = target; v != -1; v = parent[v])
         path.push_back(v);
@@ -453,12 +465,20 @@ void dijkstra(int start, int target, const vector<vector<Edge>>& graph) {
 }
 
 void lab5() {
+    logo(4);
     setlocale(LC_ALL, "");
     int n = 9;
     vector<vector<Edge>> graph(n);
     set<pair<int, int>> added_edges;
+    vector<vector<int>> edges;
 
-    vector<vector<int>> edges = {
+    int chname;
+    cout << "Чей граф?\n"
+        "1. Дима и Лиза\n"
+        "\n~#: ";
+    cin >> chname;
+    if (chname == 1) {
+        edges = {
         {1, 2, 10}, {1, 7, 3}, {1, 8, 6}, {1, 9, 12},
         {2, 3, 18}, {2, 7, 2}, {2, 9, 13},
         {3, 9, 7}, {3, 6, 20}, {3, 4, 25},
@@ -467,7 +487,20 @@ void lab5() {
         {6, 7, 1}, {6, 8, 15}, {6, 9, 9},
         {7, 9, 24},
         {8, 5, 23}, {8, 6, 15}, {8, 9, 5}
-    };
+        };
+    } else {
+        cout << "Ответ не корректный!" << endl << "Используется граф по умолчанию" << endl;
+        edges = {
+        {1, 2, 10}, {1, 7, 3}, {1, 8, 6}, {1, 9, 12},
+        {2, 3, 18}, {2, 7, 2}, {2, 9, 13},
+        {3, 9, 7}, {3, 6, 20}, {3, 4, 25},
+        {4, 5, 5}, {4, 6, 16}, {4, 7, 4},
+        {5, 6, 10},
+        {6, 7, 1}, {6, 8, 15}, {6, 9, 9},
+        {7, 9, 24},
+        {8, 5, 23}, {8, 6, 15}, {8, 9, 5}
+        };
+    }
 
     for (const auto& edge : edges) {
         int u = edge[0] - 1;
@@ -475,7 +508,7 @@ void lab5() {
         int w = edge[2];
 
         if (u >= n || v >= n) {
-            cout << "Ошибка: выход за границы массива!" << endl;
+            cout << "\nОшибка: выход за границы массива!" << endl;
             continue;
         }
 
